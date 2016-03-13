@@ -1,0 +1,68 @@
+Effect of Sleep Deprivation on Reaction Times
+========================================================
+author: John Snell
+font-import: http://fonts.googleapis.com/css?family=Risque
+font-family: 'Risque'
+date: Mar 13, 2016
+
+
+
+
+Background
+========================================================
+
+Sleep deprivation is a serious condition potentially impacting on the welfare both in terms of health, safety, and financially of those individuals affected.
+
+In 2003, Gregory Belenky et al. published a paper on the results of sleep deprivation trials they ran with 18 participants.
+
+- The trial ran over a period of 10 days. 
+
+- On the first day the reaction times of each participant were measured. 
+
+- Each night for the subsequent 9 nights, each participant was limited to 3 hours sleep only.
+
+- Their reactions times were taken the next day.
+
+
+Sleep Study Data Set
+========================================================
+
+
+<small>The following plot shows the distribution of the reaction times collected by Gregory Belenky et al.</small>
+```{r, echo = FALSE}
+library(dplyr)
+
+sleep<-read.csv(".\\XL\\sleepstudy.csv")
+temp<-group_by(sleep,Subject)
+  
+plot(temp$Reaction-min(temp$Reaction)~temp$Days,col=temp$Subject, xlab="Days of Sleep Deprivation",ylab="Reaction Time offset against the fastest time",main="Reaction Times Vs Days of Sleep Deprivation for a Set of 18 Subjects",cex.main=0.9)
+mod<-lm(Reaction-min(Reaction)~Days,data=temp)
+abline(a=mod$coefficients[1],b=mod$coefficients[2])
+
+```
+<small> The regression line implies a correlation between reaction times and the number of consecutive days of sleep deprivation.</small>
+
+Shiny App: Effect of Sleep Deprivation on Reaction Times
+========================================================
+A Shiny App has been developed that allows a user to explore the apparent correlation in more detail.
+
+
+The app provides:<small>
+- Regression information on the entire participant group.
+- Regression information on each individual participant within the group.
+- One simple control to select participants.
+- A plot of the reactions times for selected participants together with a regression line.
+- A table containing regression line offset and slope, together with the P value and R Squared value for each participant.</small>
+
+This app is available through the link supplied in the references.
+
+
+
+References
+=======================================================
+
+- http://www.webmd.com/sleep-disorders/features/important-sleep-habits
+- http://www.inside-r.org/packages/cran/lme4/docs/sleepstudy
+- Gregory Belenky, Nancy J. Wesensten, David R. Thorne, Maria L. Thomas, Helen C. Sing, Daniel P. Redmond, Michael B. Russo, and Thomas J. Balkin. 2003. "Patterns of Performance Degradation and Restoration During Sleep Restriction and Subsequent Recovery: A Sleep Dose-Response Study." Journal of Sleep Research 12: 1-12.
+- Dataset: https://vincentarelbundock.github.io/Rdatasets/csv/lme4/sleepstudy.csv
+- Link to Shiny App: https://snellj.shinyapps.io/SleepDeprivationStudyApp/

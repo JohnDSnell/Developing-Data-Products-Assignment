@@ -1,0 +1,47 @@
+---
+title: "Developing Data Products Shiny App Assignment - Sleep Deprivation Study"
+author: "John Snell"
+date: "13 March 2016"
+output: html_document
+bibliography: assignmentbiblio.bib
+---
+
+This document provides the support documentation for the Shiny App built as part of the course requirements for the Developing Data Products course.
+
+#Background
+The *sleepstudy* dataset contained in the lme4 package was used as a basis for this study.
+The description of this dataset [@inside-R_1] states:
+
+*The average reaction time per day for subjects in a sleep deprivation study. On day 0 the subjects had their normal amount of sleep. Starting that night they were restricted to 3 hours of sleep per night. The observations represent the average reaction time on a series of tests given each day to each subject. *
+
+There were 18 participants in this trial, each of which were sleep derived for 9 consecutive days afer the intial day. 
+See @belenkyetal2003.
+
+The data was downloaded into the assignment workspace from **Github**.
+```{r}
+sleep <- read.csv("https://vincentarelbundock.github.io/Rdatasets/csv/lme4/sleepstudy.csv")
+str(sleep)
+```
+
+The following plot shows the data points collected for each of the 18 participants for the nine days.
+
+```{r, echo=FALSE}
+plot(sleep$Reaction-min(sleep$Reaction)~sleep$Days,
+     col=sleep$Subject, 
+     xlab="Days of Sleep Deprivation",
+     ylab="Reaction Time offset against the fastest time",
+     main="Normalised Reaction Times Vs Days of Sleep Deprivation for all Participants",
+     cex.main=0.9)
+
+```
+
+The plot gives an indication that there appears to be some correlation between the number of days of sleep deprivation and the reaction times for each of the participants.
+
+#The Application
+The Shiny app was written to enable a user to explore that correlation further in an interactive way.
+The inputs are kept simple -  only one control is provided which allows a user to identify the specific participant they wish to explore. The default for this selection is all 18 participants. 
+
+Selection of a specific participant isolates their data. The system plots that data offset against the fastest time within the data subset, together with the regression line for that data.
+When *all* participants are selected the regression line is for all the data points for all participants. A table of the regression coefficients for each of the selected participants is displayed below the plot. In the case of *all* being selected the first row in the table shows the values associated with the displayed regression line. The other row entries show the specific regression characteristics of each individual participant. Participant 335 is worthy of detailed examination.
+
+#Bibliography
